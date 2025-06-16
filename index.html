@@ -1,1090 +1,1407 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sri Lanka Travel Dashboard</title>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        color: #333;
-        transition: background 0.4s, color 0.4s;
-    }
-
-    .container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px;
-        height: auto;
-    }
-
-    .header {
-        text-align: center;
-        margin-bottom: 30px;
-        color: white;
-    }
-
-    .header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .header p {
-        font-size: 1.2rem;
-        opacity: 0.9;
-    }
-
-.dashboard-grid {
-    column-count: 3;
-    column-gap: 20px;
-}
-
-@media (max-width: 1200px) {
-    .dashboard-grid {
-        column-count: 2;
-    }
-}
-
-@media (max-width: 768px) {
-    .dashboard-grid {
-        column-count: 1;
-    }
-}
-
-.card {
-    break-inside: avoid;
-    margin-bottom: 20px;
-}
-
-    .card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        backdrop-filter: blur(10px);
-        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.4s, color 0.4s;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    }
-
-    .card-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-    .card-icon {
-        font-size: 1.5rem;
-        margin-right: 15px;
-        padding: 10px;
-        border-radius: 50%;
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        color: white;
-    }
-
-    .card-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .tabs {
-        display: flex;
-        margin-bottom: 20px;
-    }
-
-    .tab {
-        background: #f8f9fa;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px 5px 0 0;
-        margin-right: 5px;
-        transition: all 0.3s ease;
-    }
-
-    .tab.active {
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        color: white;
-    }
-
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    .itinerary-item {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-left: 4px solid #667eea;
-        transition: all 0.3s ease;
-    }
-
-    .itinerary-item:hover {
-        background: #e9ecef;
-        transform: translateX(5px);
-    }
-
-    .date-badge {
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        color: white;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        display: inline-block;
-        margin-bottom: 10px;
-    }
-
-    .location-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .hotel-name {
-        font-weight: 600;
-        color: #333;
-    }
-
-    .area-name {
-        color: #667eea;
-        font-weight: 500;
-    }
-
-    .checklist {
-        list-style: none;
-    }
-
-    .checklist-item {
-        display: flex;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .checklist-item:last-child {
-        border-bottom: none;
-    }
-
-    .checklist-item input[type="checkbox"] {
-        margin-right: 12px;
-        transform: scale(1.2);
-        accent-color: #667eea;
-    }
-
-    .checklist-item label {
-        cursor: pointer;
-        flex: 1;
-        transition: color 0.3s ease;
-    }
-
-    .checklist-item input[type="checkbox"]:checked + label {
-        color: #888;
-        text-decoration: line-through;
-    }
-
-    .weather-info {
-        background: linear-gradient(135deg, #74b9ff, #0984e3);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-
-    .weather-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 15px;
-        text-align: center;
-    }
-
-    .weather-item {
-        background: rgba(255,255,255,0.2);
-        padding: 15px;
-        border-radius: 10px;
-    }
-
-    .weather-temp {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-
-    .tips-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-    }
-
-    .tip-item {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 10px;
-        border-left: 4px solid #28a745;
-    }
-
-    .tip-title {
-        font-weight: 600;
-        color: #28a745;
-        margin-bottom: 8px;
-    }
-
-    .progress-bar {
-        width: 100%;
-        height: 8px;
-        background: #e9ecef;
-        border-radius: 4px;
-        overflow: hidden;
-        margin: 15px 0;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        border-radius: 4px;
-        transition: width 0.3s ease;
-    }
-
-    .emergency-contacts {
-        background: #ff6b6b;
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-    }
-
-    .emergency-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-top: 15px;
-    }
-
-    .emergency-item {
-        background: rgba(255,255,255,0.2);
-        padding: 15px;
-        border-radius: 8px;
-    }
-
-    .currency-info {
-        background: #ffeaa7;
-        color: #2d3436;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 15px;
-    }
-
-    .location-specific {
-        margin-top: 20px;
-    }
-
-    .location-card {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-left: 4px solid #667eea;
-    }
-
-    .risk-warning {
-        background: #fed7d7;
-        color: #c53030;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-        font-size: 0.9rem;
-    }
-
-    .prevention-tip {
-        background: #c6f6d5;
-        color: #22543d;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 5px;
-        font-size: 0.9rem;
-    }
-
-    /* --- DARK MODE STYLES --- */
-    body.dark-mode {
-        background: linear-gradient(135deg, #232946 0%, #18122B 100%);
-        color: #eaeaea;
-    }
-    body.dark-mode .header {
-        color: #eaeaea;
-    }
-    body.dark-mode .card {
-        background: rgba(34, 34, 51, 0.98);
-        color: #eaeaea;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    body.dark-mode .card-title,
-    body.dark-mode .hotel-name {
-        color: #eaeaea;
-    }
-    body.dark-mode .card-header {
-        border-bottom: 2px solid #232946;
-    }
-    body.dark-mode .card-icon {
-        background: linear-gradient(45deg, #232946, #764ba2);
-        color: #fff;
-    }
-    body.dark-mode .tab {
-        background: #232946;
-        color: #eaeaea;
-    }
-    body.dark-mode .tab.active {
-        background: linear-gradient(45deg, #232946, #764ba2);
-        color: #fff;
-    }
-    body.dark-mode .itinerary-item,
-    body.dark-mode .tip-item,
-    body.dark-mode .location-card {
-        background: #232946;
-        color: #eaeaea;
-        border-left: 4px solid #764ba2;
-    }
-    body.dark-mode .itinerary-item:hover {
-        background: #18122B;
-    }
-    body.dark-mode .date-badge {
-        background: linear-gradient(45deg, #232946, #764ba2);
-        color: #fff;
-    }
-    body.dark-mode .area-name {
-        color: #a09be7;
-    }
-    body.dark-mode .checklist-item {
-        border-bottom: 1px solid #232946;
-    }
-    body.dark-mode .checklist-item input[type="checkbox"] {
-        accent-color: #764ba2;
-    }
-    body.dark-mode .weather-info {
-        background: linear-gradient(135deg, #232946, #764ba2);
-        color: #eaeaea;
-    }
-    body.dark-mode .weather-item {
-        background: rgba(34,34,51,0.5);
-    }
-    body.dark-mode .progress-bar {
-        background: #232946;
-    }
-    body.dark-mode .progress-fill {
-        background: linear-gradient(90deg, #232946, #764ba2);
-    }
-    body.dark-mode .emergency-contacts {
-        background: #c53030;
-        color: #fff;
-    }
-    body.dark-mode .emergency-item {
-        background: rgba(34,34,51,0.5);
-    }
-    body.dark-mode .currency-info {
-        background: #232946;
-        color: #ffeaa7;
-    }
-    body.dark-mode .risk-warning {
-        background: #4b2e2e;
-        color: #ffb4b4;
-    }
-    body.dark-mode .prevention-tip {
-        background: #22543d;
-        color: #c6f6d5;
-    }
-    /* Dark mode toggle button */
-    .dark-toggle-btn {
-        position: fixed;
-        top: 24px;
-        right: 24px;
-        z-index: 1000;
-        background: #fff;
-        color: #232946;
-        border: none;
-        border-radius: 50px;
-        padding: 10px 18px;
-        font-size: 1.1rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-        cursor: pointer;
-        transition: background 0.3s, color 0.3s;
-    }
-    .dark-toggle-btn:hover {
-        background: #232946;
-        color: #fff;
-    }
-    body.dark-mode .dark-toggle-btn {
-        background: #232946;
-        color: #fff;
-        border: 1px solid #764ba2;
-    }
-    body.dark-mode .dark-toggle-btn:hover {
-        background: #fff;
-        color: #232946;
-    }
-    @media (max-width: 768px) {
-        .dashboard-grid {
-        grid-template-columns: 1fr;
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Sri Lanka Travel Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .header h1 {
-        font-size: 2rem;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            transition: background 0.4s, color 0.4s;
         }
+
         .container {
-        padding: 10px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            height: auto;
         }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            column-count: 3;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                column-count: 1;
+            }
+        }
+
+        .card {
+            break-inside: avoid;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.4s, color 0.4s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            padding: 10px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            background: #f8f9fa;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .itinerary-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .itinerary-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .date-badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .location-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .hotel-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .area-name {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: #667eea;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+
+        .checklist-item input[type="checkbox"]:checked+label {
+            color: #888;
+            text-decoration: line-through;
+        }
+
+        .weather-info {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+
+        .weather-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .weather-temp {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .tip-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .emergency-contacts {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .emergency-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .currency-info {
+            background: #ffeaa7;
+            color: #2d3436;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .location-specific {
+            margin-top: 20px;
+        }
+
+        .location-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .risk-warning {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .prevention-tip {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* --- DARK MODE STYLES --- */
+        body.dark-mode {
+            background: linear-gradient(135deg, #232946 0%, #18122B 100%);
+            color: #eaeaea;
+        }
+
+        body.dark-mode .header {
+            color: #eaeaea;
+        }
+
+        body.dark-mode .card {
+            background: rgba(34, 34, 51, 0.98);
+            color: #eaeaea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .card-title,
+        body.dark-mode .hotel-name {
+            color: #eaeaea;
+        }
+
+        body.dark-mode .card-header {
+            border-bottom: 2px solid #232946;
+        }
+
+        body.dark-mode .card-icon {
+            background: linear-gradient(45deg, #232946, #764ba2);
+            color: #fff;
+        }
+
+        body.dark-mode .tab {
+            background: #232946;
+            color: #eaeaea;
+        }
+
+        body.dark-mode .tab.active {
+            background: linear-gradient(45deg, #232946, #764ba2);
+            color: #fff;
+        }
+
+        body.dark-mode .itinerary-item,
+        body.dark-mode .tip-item,
+        body.dark-mode .location-card {
+            background: #232946;
+            color: #eaeaea;
+            border-left: 4px solid #764ba2;
+        }
+
+        body.dark-mode .itinerary-item:hover {
+            background: #18122B;
+        }
+
+        body.dark-mode .date-badge {
+            background: linear-gradient(45deg, #232946, #764ba2);
+            color: #fff;
+        }
+
+        body.dark-mode .area-name {
+            color: #a09be7;
+        }
+
+        body.dark-mode .checklist-item {
+            border-bottom: 1px solid #232946;
+        }
+
+        body.dark-mode .checklist-item input[type="checkbox"] {
+            accent-color: #764ba2;
+        }
+
+        body.dark-mode .weather-info {
+            background: linear-gradient(135deg, #232946, #764ba2);
+            color: #eaeaea;
+        }
+
+        body.dark-mode .weather-item {
+            background: rgba(34, 34, 51, 0.5);
+        }
+
+        body.dark-mode .progress-bar {
+            background: #232946;
+        }
+
+        body.dark-mode .progress-fill {
+            background: linear-gradient(90deg, #232946, #764ba2);
+        }
+
+        body.dark-mode .emergency-contacts {
+            background: #c53030;
+            color: #fff;
+        }
+
+        body.dark-mode .emergency-item {
+            background: rgba(34, 34, 51, 0.5);
+        }
+
+        body.dark-mode .currency-info {
+            background: #232946;
+            color: #ffeaa7;
+        }
+
+        body.dark-mode .risk-warning {
+            background: #4b2e2e;
+            color: #ffb4b4;
+        }
+
+        body.dark-mode .prevention-tip {
+            background: #22543d;
+            color: #c6f6d5;
+        }
+
+        /* Dark mode toggle button */
         .dark-toggle-btn {
-        top: 12px;
-        right: 12px;
-        padding: 8px 14px;
-        font-size: 1rem;
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+            background: #fff;
+            color: #232946;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 18px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
         }
-    }
-    
-.add-item-container {
-    display: flex;
-    margin-top: 10px;
-}
-.add-item-container input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 8px 0 0 8px;
-}
-.add-item-container button {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    border: none;
-    color: white;
-    padding: 8px 16px;
-    cursor: pointer;
-    border-radius: 0 8px 8px 0;
-    transition: background 0.3s;
-}
-.add-item-container button:hover {
-    background: linear-gradient(45deg, #556eea, #653ba2);
-}
-.remove-btn {
-    background: none;
-    border: none;
-    color: #ff6b6b;
-    font-size: 1.2rem;
-    margin-left: 10px;
-    cursor: pointer;
-}
-</style>
+
+        .dark-toggle-btn:hover {
+            background: #232946;
+            color: #fff;
+        }
+
+        body.dark-mode .dark-toggle-btn {
+            background: #232946;
+            color: #fff;
+            border: 1px solid #764ba2;
+        }
+
+        body.dark-mode .dark-toggle-btn:hover {
+            background: #fff;
+            color: #232946;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .dark-toggle-btn {
+                top: 12px;
+                right: 12px;
+                padding: 8px 14px;
+                font-size: 1rem;
+            }
+        }
+
+        .add-item-container {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .add-item-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .add-item-container button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+            transition: background 0.3s;
+        }
+
+        .add-item-container button:hover {
+            background: linear-gradient(45deg, #556eea, #653ba2);
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .collapsible-header {
+            cursor: pointer;
+            justify-content: space-between;
+            display: flex;
+        }
+
+        .collapsible-header::after {
+            content: '▼';
+            font-size: 1rem;
+            margin-left: auto;
+            transition: transform 0.3s;
+        }
+
+        .collapsible-header.collapsed::after {
+            transform: rotate(-90deg);
+        }
+
+        .collapsible-content {
+            overflow: hidden;
+            max-height: 2000px;
+            transition: max-height 0.4s ease;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+
+        .checklist {
+            padding-left: 10px;
+        }
+
+        .main-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .main-tab {
+            background: #f8f9fa;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .main-tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .main-tab-content {
+            display: none;
+        }
+
+        .main-tab-content.active {
+            display: block !important;
+        }
+
+        .main-tabs {
+            justify-content: center;
+        }
+    </style>
 </head>
+
 <body>
-<button aria-label="Toggle dark mode" class="dark-toggle-btn" id="darkToggle">🌙 Dark Mode</button>
-<div class="container">
-<div class="header">
-<h1>🏝️ Sri Lanka Adventure</h1>
-<p>July 9-19, 2025 • The Shamans</p>
-</div>
-<div class="dashboard-grid">
-<!-- Itinerary Card -->
-<div class="card">
-<div class="card-header">
-<div class="card-icon">📅</div>
-<div class="card-title">Travel Itinerary</div>
-</div>
-<div id="itinerary-content">
-<div class="itinerary-item">
-<div class="date-badge">July 9-11</div>
-<div class="location-info">
-<div class="hotel-name">Agnus Hotel</div>
-<div class="area-name">Unawatuna</div>
-</div>
-<div class="location-card">
-<strong>Beach Paradise</strong>
-<div class="risk-warning">⚠️ Strong sun &amp; dehydration risk</div>
-<div class="prevention-tip">💡 Stay hydrated, use sunscreen, avoid midday sun</div>
-</div>
-</div><div class="itinerary-item">
-<div class="date-badge">July 10-11</div>
-<div class="location-info">
-<div class="hotel-name">Leopard Nest Safari Camp</div>
-<div class="area-name">Yala National Park</div>
-</div>
-<div class="location-card">
-<strong>Safari Adventure</strong>
-<div class="risk-warning">⚠️ Wild animals, dehydration</div>
-<div class="prevention-tip">💡 Follow guides, stay in vehicle, bring water</div>
-</div>
-</div>
-<div class="itinerary-item">
-<div class="date-badge">July 11-12</div>
-<div class="location-info">
-<div class="hotel-name">Jetwing Surf / Kotukkai Beach House</div>
-<div class="area-name">Arugam Bay</div>
-</div>
-<div class="location-card">
-<strong>Surf &amp; Beach</strong>
-<div class="risk-warning">⚠️ Rip currents, petty theft</div>
-<div class="prevention-tip">💡 Swim in designated areas, secure valuables</div>
-</div>
-</div>
-<div class="itinerary-item">
-<div class="date-badge">July 12-15</div>
-<div class="location-info">
-<div class="hotel-name">Hide Ella Hotel &amp; Resort</div>
-<div class="area-name">Ella</div>
-</div>
-<div class="location-card">
-<strong>Mountain Hiking</strong>
-<div class="risk-warning">⚠️ Leeches, slippery paths, altitude</div>
-<div class="prevention-tip">💡 Long socks, good hiking shoes, stay hydrated</div>
-</div>
-</div>
-<div class="itinerary-item">
-<div class="date-badge">July 15-16</div>
-<div class="location-info">
-<div class="hotel-name">The Golden Ridge Hotel</div>
-<div class="area-name">Nuwara Eliya</div>
-</div>
-<div class="location-card">
-<strong>Tea Country</strong>
-<div class="risk-warning">⚠️ Cold &amp; damp weather</div>
-<div class="prevention-tip">💡 Bring warm clothes, layers, raincoat</div>
-</div>
-</div>
-<div class="itinerary-item">
-<div class="date-badge">July 16-17</div>
-<div class="location-info">
-<div class="hotel-name">Grand Serendib Hotel</div>
-<div class="area-name">Kandy</div>
-</div>
-<div class="location-card">
-<strong>Cultural Capital</strong>
-<div class="risk-warning">⚠️ Crowds, scams, temple monkeys</div>
-<div class="prevention-tip">💡 Be mindful in crowds, avoid unsolicited guides</div>
-</div>
-</div>
-<div class="itinerary-item">
-<div class="date-badge">July 17-19</div>
-<div class="location-info">
-<div class="hotel-name">Jetwing Lake</div>
-<div class="area-name">Sigiriya</div>
-</div>
-<div class="location-card">
-<strong>Ancient Rock Fortress</strong>
-<div class="risk-warning">⚠️ Heat exhaustion, steep climb, bee hives</div>
-<div class="prevention-tip">💡 Start early, carry water, avoid noise near hives</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Weather & Climate -->
-<div class="card">
-<div class="card-header">
-<div class="card-icon">🌤️</div>
-<div class="card-title">Weather &amp; Climate</div>
-</div>
-<div class="weather-info">
-<h3>July Climate Overview</h3>
-<div class="weather-grid">
-<div class="weather-item">
-<div class="weather-temp">28-32°C</div>
-<div>Coastal Areas</div>
-</div>
-<div class="weather-item">
-<div class="weather-temp">18-22°C</div>
-<div>Hill Country</div>
-</div>
-<div class="weather-item">
-<div class="weather-temp">High</div>
-<div>Humidity</div>
-</div>
-<div class="weather-item">
-<div class="weather-temp">Monsoon</div>
-<div>Season</div>
-</div>
-</div>
-</div>
-<div class="tips-grid">
-<div class="tip-item">
-<div class="tip-title">☀️ Sun Protection</div>
-<div>SPF 30+ sunscreen, hat, sunglasses</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🌧️ Rain Gear</div>
-<div>Umbrella, waterproof jacket</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🧥 Layers</div>
-<div>Light layers for different altitudes</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">👟 Footwear</div>
-<div>Waterproof shoes for hiking</div>
-</div>
-</div>
-</div>
-<!-- Packing Checklist -->
-<div class="card">
-<div class="card-header">
-<div class="card-icon">🎒</div>
-<div class="card-title">Packing Checklist</div>
-</div>
-<div class="tabs">
-<button class="tab active" data-tab="essentials">Essentials</button>
-<button class="tab" data-tab="location-specific">By Location</button>
-<button class="tab" data-tab="extras">Extras</button>
-</div>
-<div class="tab-content active" id="essentials">
-<div class="progress-bar">
-<div class="progress-fill" id="essentials-progress" style="width: 0%"></div>
-</div>
-<div id="essentials-count">0/14 items packed</div>
-<ul class="checklist">
-<li class="checklist-item">
-<input id="passport" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="passport">📘 Passport &amp; Visa (valid 6+ months)</label>
-</li>
-<li class="checklist-item">
-<input id="insurance" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="insurance">🛡️ Travel Insurance Documents</label>
-</li>
-<li class="checklist-item">
-<input id="vaccines" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="vaccines">💉 Vaccination Certificate (Hep A/B, Typhoid)</label>
-</li>
-<li class="checklist-item">
-<input id="clothing" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="clothing">👕 Lightweight, breathable clothing</label>
-</li>
-<li class="checklist-item">
-<input id="repellent" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="repellent">🦟 DEET-based mosquito repellent</label>
-</li>
-<li class="checklist-item">
-<input id="sunscreen" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="sunscreen">☀️ Sunscreen SPF 30+</label>
-</li>
-<li class="checklist-item">
-<input id="adapter" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="adapter">🔌 Power adapter (Type G - British style)</label>
-</li>
-<li class="checklist-item">
-<input id="water" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="water">💧 Reusable water bottle + filter</label>
-</li>
-<li class="checklist-item">
-<input id="currency" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="currency">💰 Local currency (LKR) &amp; cards</label>
-</li>
-<li class="checklist-item">
-<input id="sim" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="sim">📱 SIM card/eSIM (Dialog/Airtel)</label>
-</li>
-<li class="checklist-item">
-<input id="itinerary" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="itinerary">📋 Printed travel itinerary</label>
-</li>
-<li class="checklist-item">
-<input id="copies" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="copies">📄 Passport/ID copies</label>
-</li>
-<li class="checklist-item">
-<input id="emergency" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="emergency">🚨 Emergency contact list</label>
-</li>
-<li class="checklist-item">
-<input id="daypack" onchange="updateProgress('essentials')" type="checkbox"/>
-<label for="daypack">🎒 Daypack for excursions</label>
-</li>
-</ul>
-
-<div class="add-item-container">
-<input id="essentials-input" placeholder="Add new item..." type="text"/>
-<button onclick="addItem('essentials')">➕ Add</button>
-</div>
-</div>
-<div class="tab-content" id="location-specific">
-<div class="location-specific">
-<h4>Beach Locations (Unawatuna, Arugam Bay)</h4>
-<ul class="checklist">
-<li class="checklist-item">
-<input id="beachwear" type="checkbox"/>
-<label for="beachwear">👙 Beachwear &amp; swimwear</label>
-</li>
-<li class="checklist-item">
-<input id="reef-sunscreen" type="checkbox"/>
-<label for="reef-sunscreen">🐠 Reef-safe sunscreen</label>
-</li>
-<li class="checklist-item">
-<input id="flipflops" type="checkbox"/>
-<label for="flipflops">🩴 Flip flops &amp; waterproof sandals</label>
-</li>
-<li class="checklist-item">
-<input id="dry-bag" type="checkbox"/>
-<label for="dry-bag">💼 Dry bag &amp; waterproof phone pouch</label>
-</li>
-</ul>
-<h4>Hill Country (Ella, Nuwara Eliya)</h4>
-<ul class="checklist">
-<li class="checklist-item">
-<input id="hiking-shoes" type="checkbox"/>
-<label for="hiking-shoes">🥾 Hiking shoes with good grip</label>
-</li>
-<li class="checklist-item">
-<input id="warm-clothes" type="checkbox"/>
-<label for="warm-clothes">🧥 Warm clothes &amp; layers</label>
-</li>
-<li class="checklist-item">
-<input id="rain-jacket" type="checkbox"/>
-<label for="rain-jacket">🌧️ Rain jacket &amp; umbrella</label>
-</li>
-<li class="checklist-item">
-<input id="leech-protection" type="checkbox"/>
-<label for="leech-protection">🧦 Long socks &amp; leech repellent</label>
-</li>
-</ul>
-<h4>Cultural Sites (Kandy, Sigiriya)</h4>
-<ul class="checklist">
-<li class="checklist-item">
-<input id="temple-attire" type="checkbox"/>
-<label for="temple-attire">👔 Temple attire (covered shoulders/knees)</label>
-</li>
-<li class="checklist-item">
-<input id="climbing-shoes" type="checkbox"/>
-<label for="climbing-shoes">👟 Comfortable climbing shoes</label>
-</li>
-<li class="checklist-item">
-<input id="sun-hat" type="checkbox"/>
-<label for="sun-hat">🧢 Sun hat &amp; hydration pack</label>
-</li>
-</ul>
-</div>
-
-<div class="add-item-container">
-<input id="location-specific-input" placeholder="Add new item..." type="text"/>
-<button onclick="addItem('location-specific')">➕ Add</button>
-</div>
-</div>
-<div class="tab-content" id="extras">
-<ul class="checklist">
-<li class="checklist-item">
-<input id="travel-towel" type="checkbox"/>
-<label for="travel-towel">🏃‍♂️ Quick-dry travel towel</label>
-</li>
-<li class="checklist-item">
-<input id="first-aid" type="checkbox"/>
-<label for="first-aid">🏥 Small first aid kit</label>
-</li>
-<li class="checklist-item">
-<input id="power-bank" type="checkbox"/>
-<label for="power-bank">🔋 Portable charger/power bank</label>
-</li>
-<li class="checklist-item">
-<input id="offline-maps" type="checkbox"/>
-<label for="offline-maps">🗺️ Offline maps app (Maps.me)</label>
-</li>
-<li class="checklist-item">
-<input id="phrasebook" type="checkbox"/>
-<label for="phrasebook">📖 Sinhala/Tamil phrasebook or app</label>
-</li>
-<li class="checklist-item">
-<input id="travel-pillow" type="checkbox"/>
-<label for="travel-pillow">😴 Travel pillow</label>
-</li>
-<li class="checklist-item">
-<input id="snacks" type="checkbox"/>
-<label for="snacks">🥜 Snacks (nuts, granola bars)</label>
-</li>
-<li class="checklist-item">
-<input id="laundry" type="checkbox"/>
-<label for="laundry">🧼 Laundry detergent sheets</label>
-</li>
-<li class="checklist-item">
-<input id="whistle" type="checkbox"/>
-<label for="whistle">🔊 Safety whistle</label>
-</li>
-<li class="checklist-item">
-<input id="sink-plug" type="checkbox"/>
-<label for="sink-plug">🛁 Universal sink plug</label>
-</li>
-<li class="checklist-item">
-<input id="snorkel" type="checkbox"/>
-<label for="snorkel">🤿 Snorkel mask</label>
-</li>
-</ul>
-
-<div class="add-item-container">
-<input id="extras-input" placeholder="Add new item..." type="text"/>
-<button onclick="addItem('extras')">➕ Add</button>
-</div>
-</div>
-</div>
-<!-- Important Information -->
-<div class="card">
-<div class="card-header">
-<div class="card-icon">ℹ️</div>
-<div class="card-title">Essential Info for Europeans</div>
-</div>
-<div class="currency-info">
-<h4>💰 Currency &amp; Money</h4>
-<p><strong>Sri Lankan Rupee (LKR)</strong> - 1 EUR ≈ 350 LKR (rates fluctuate)</p>
-<p>ATMs widely available, cards accepted in hotels/restaurants. Cash preferred for local transport, street food, and small shops.</p>
-</div>
-<div class="tips-grid">
-<div class="tip-item">
-<div class="tip-title">⏰ Time Zone</div>
-<div>UTC +5:30 (3.5-4.5 hours ahead of Europe)</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🗣️ Languages</div>
-<div>Sinhala, Tamil, English widely spoken</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🚗 Transport</div>
-<div>Tuk-tuks, buses, trains. Agree on prices beforehand</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🍛 Food Safety</div>
-<div>Bottled water, cooked food, avoid street ice</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🏛️ Culture</div>
-<div>Remove shoes at temples, dress modestly</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">💡 Tipping</div>
-<div>10% at restaurants, 100-200 LKR for guides</div>
-</div>
-</div>
-</div>
-<!-- Emergency Contacts -->
-<div class="card">
-<div class="card-header">
-<div class="card-icon">🚨</div>
-<div class="card-title">Emergency Contacts</div>
-</div>
-<div class="emergency-contacts">
-<h3>Important Numbers</h3>
-<div class="emergency-grid">
-<div class="emergency-item">
-<strong>Police</strong><br/>
-                📞 119 / 112
+    <button aria-label="Toggle dark mode" class="dark-toggle-btn" id="darkToggle">🌙</button>
+    <div class="container">
+        <div class="header">
+            <h1>🏝️ Sri Lanka Adventure</h1>
+            <p>July 9-19, 2025 • The Shamans</p>
+        </div>
+        <div class="main-tabs"><button class="main-tab" data-tab="section-1">🧭 Travel &amp; Weather</button><button
+                class="main-tab" data-tab="section-2">🎒 Packing</button><button class="main-tab"
+                data-tab="section-3">ℹ️ Info &amp; Safety</button></div>
+        <div class="dashboard-grid">
+            <div class="dashboard-section section-1 main-tab-content active">
+                <div class="card">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">🗺️</div>
+                        <div class="card-title">Trip Map Overview</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <iframe allowfullscreen="" height="480" loading="lazy"
+                            src="https://www.google.com/maps/d/embed?mid=15SjeZr0oMmlKgR8OJ_N9gmnGUTfrrdg&amp;ehbc=2E312F"
+                            style="border:0; border-radius: 10px;" width="100%"></iframe>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">📍 Unawatuna → Yala → Arugam Bay → Ella → Nuwara
+                            Eliya → Kandy → Sigiriya → Colombo</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">📅</div>
+                        <div class="card-title">Travel Itinerary</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <div id="itinerary-content">
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 9-11</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">Agnus Hotel</div>
+                                    <div class="area-name">Unawatuna</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Beach Paradise</strong>
+                                    <div class="risk-warning">⚠️ Strong sun &amp; dehydration risk</div>
+                                    <div class="prevention-tip">💡 Stay hydrated, use sunscreen, avoid midday sun</div>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 10-11</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">Four Chalets</div>
+                                    <div class="area-name">Yala National Park</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Safari Adventure</strong>
+                                    <div class="risk-warning">⚠️ Wild animals, dehydration</div>
+                                    <div class="prevention-tip">💡 Follow guides, stay in vehicle, bring water</div>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 11-12</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">Jetwing Surf / Kotukkai Beach House</div>
+                                    <div class="area-name">Arugam Bay</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Surf &amp; Beach</strong>
+                                    <div class="risk-warning">⚠️ Rip currents, petty theft</div>
+                                    <div class="prevention-tip">💡 Swim in designated areas, secure valuables</div>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 12-15</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">Hide Ella Hotel &amp; Resort</div>
+                                    <div class="area-name">Ella</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Mountain Hiking</strong>
+                                    <div class="risk-warning">⚠️ Leeches, slippery paths, altitude</div>
+                                    <div class="prevention-tip">💡 Long socks, good hiking shoes, stay hydrated</div>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 15-16</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">The Golden Ridge Hotel</div>
+                                    <div class="area-name">Nuwara Eliya</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Tea Country</strong>
+                                    <div class="risk-warning">⚠️ Cold &amp; damp weather</div>
+                                    <div class="prevention-tip">💡 Bring warm clothes, layers, raincoat</div>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 16-17</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">Grand Serendib Hotel</div>
+                                    <div class="area-name">Kandy</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Cultural Capital</strong>
+                                    <div class="risk-warning">⚠️ Crowds, scams, temple monkeys</div>
+                                    <div class="prevention-tip">💡 Be mindful in crowds, avoid unsolicited guides</div>
+                                </div>
+                            </div>
+                            <div class="itinerary-item">
+                                <div class="date-badge">July 17-19</div>
+                                <div class="location-info">
+                                    <div class="hotel-name">Jetwing Lake</div>
+                                    <div class="area-name">Sigiriya</div>
+                                </div>
+                                <div class="location-card">
+                                    <strong>Ancient Rock Fortress</strong>
+                                    <div class="risk-warning">⚠️ Heat exhaustion, steep climb, bee hives</div>
+                                    <div class="prevention-tip">💡 Start early, carry water, avoid noise near hives
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">🌤️</div>
+                        <div class="card-title">Weather &amp; Climate</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <div class="weather-info">
+                            <h3>July Climate Overview</h3>
+                            <div class="weather-grid">
+                                <div class="weather-item">
+                                    <div class="weather-temp">28-32°C</div>
+                                    <div>Coastal Areas</div>
+                                </div>
+                                <div class="weather-item">
+                                    <div class="weather-temp">18-22°C</div>
+                                    <div>Hill Country</div>
+                                </div>
+                                <div class="weather-item">
+                                    <div class="weather-temp">High</div>
+                                    <div>Humidity</div>
+                                </div>
+                                <div class="weather-item">
+                                    <div class="weather-temp">Monsoon</div>
+                                    <div>Season</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tips-grid">
+                            <div class="tip-item">
+                                <div class="tip-title">☀️ Sun Protection</div>
+                                <div>SPF 30+ sunscreen, hat, sunglasses</div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-title">🌧️ Rain Gear</div>
+                                <div>Umbrella, waterproof jacket</div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-title">🧥 Layers</div>
+                                <div>Light layers for different altitudes</div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-title">👟 Footwear</div>
+                                <div>Waterproof shoes for hiking</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">🚌</div>
+                        <div class="card-title">Travel Time Overview</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <ul class="checklist">
+                            <li class="checklist-item"><label>Galle → Yala: 2.5h</label></li>
+                            <li class="checklist-item"><label>Yala → Arugam: 4.5h</label></li>
+                            <li class="checklist-item"><label>Arugam → Ella: 3.5h</label></li>
+                            <li class="checklist-item"><label>Ella → Nuwara Eliya: 3h train</label></li>
+                            <li class="checklist-item"><label>Nuwara Eliya → Kandy: 2.5h</label></li>
+                            <li class="checklist-item"><label>Kandy → Sigiriya: 2.5h</label></li>
+                            <li class="checklist-item"><label>Sigiriya → Colombo: 3.5h</label></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-<div class="emergency-item">
-<strong>Ambulance</strong><br/>
-                📞 110 / 112
+            <div class="dashboard-section section-2 main-tab-content" style="display:none">
+                <!-- Daily Personal -->
+                <div class="card packing-category" id="daily-personal">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">🧼</div>
+                        <div class="card-title">Daily Personal</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="daily-personal-progress" style="width: 0%"></div>
+                        </div>
+                        <div id="daily-personal-count">0/12 items packed</div>
+                        <div class="add-item-container">
+                            <input id="daily-personal-input" placeholder="Add new item..." type="text" />
+                            <button onclick="addItem('daily-personal')">➕ Add</button>
+                        </div>
+                        <ul class="checklist">
+                            <li class="checklist-item">
+                                <input id="daily-personal-toothbrush" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-toothbrush">🪥 Toothpaste &amp; toothbrush</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-glasses" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-glasses">👓 Prescription glasses</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-contacts" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-contacts">👁️ Contact lenses &amp; solution</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-sanitizer" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-sanitizer">🧴 Hand sanitizer</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-sunscreen" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-sunscreen">☀️ Sunscreen</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-chargers" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-chargers">🔌 Chargers</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-passports" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-passports">📘 Passports</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-credit-card" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-credit-card">💳 Credit card</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-hairbrush" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-hairbrush">💇 Hair brush</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-sunglasses" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-sunglasses">🕶️ Sunglasses</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-adapter" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-adapter">🔌 Plug adapter</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="daily-personal-lip-balm" onchange="updateProgress('daily-personal')"
+                                    type="checkbox" />
+                                <label for="daily-personal-lip-balm">💄 Lip balm</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Snacks -->
+                <div class="card packing-category" id="snacks">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">🍪</div>
+                        <div class="card-title">Snacks</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="snacks-progress" style="width: 0%"></div>
+                        </div>
+                        <div id="snacks-count">0/3 items packed</div>
+                        <div class="add-item-container">
+                            <input id="snacks-input" placeholder="Add new item..." type="text" />
+                            <button onclick="addItem('snacks')">➕ Add</button>
+                        </div>
+                        <ul class="checklist">
+                            <li class="checklist-item">
+                                <input id="snacks-crackers" onchange="updateProgress('snacks')" type="checkbox" />
+                                <label for="snacks-crackers">🍘 Crackers</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="snacks-bars" onchange="updateProgress('snacks')" type="checkbox" />
+                                <label for="snacks-bars">🍫 Bars</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="snacks-rice-crackers" onchange="updateProgress('snacks')" type="checkbox" />
+                                <label for="snacks-rice-crackers">🍘 Rice crackers</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- First Aid -->
+                <div class="card packing-category" id="first-aid">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">💊</div>
+                        <div class="card-title">First Aid</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="first-aid-progress" style="width: 0%"></div>
+                        </div>
+                        <div id="first-aid-count">0/18 items packed</div>
+                        <div class="add-item-container">
+                            <input id="first-aid-input" placeholder="Add new item..." type="text" />
+                            <button onclick="addItem('first-aid')">➕ Add</button>
+                        </div>
+                        <ul class="checklist">
+                            <li class="checklist-item">
+                                <input id="first-aid-painkillers" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-painkillers">💊 Painkillers (Nurofen/Panadol)</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-hemostatic" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-hemostatic">🩸 Hemostatic</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-gauze" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-gauze">🩹 Gauze</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-electrolytes" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-electrolytes">🥤 Electrolytes</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-antibiotics" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-antibiotics">💉 Antibiotics</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-imodium" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-imodium">🚽 Imodium</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-elitan" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-elitan">🌿 Elitan</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-bepanthen" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-bepanthen">🧴 Bepanthen</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-repellent" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-repellent">🦟 Strong insect repellent</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-plasters" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-plasters">🩹 Plasters</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-bandages" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-bandages">🩼 Bandages</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-nexium" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-nexium">💊 Nexium</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-melatonin" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-melatonin">🌙 Melatonin</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-blister-treatment" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-blister-treatment">🦶 Blister treatment</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-eyedrops" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-eyedrops">👁️ Eye drops</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-vitamins" onchange="updateProgress('first-aid')" type="checkbox" />
+                                <label for="first-aid-vitamins">🧪 Vitamins</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-antihistamines" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-antihistamines">🤧 Antihistamines</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="first-aid-antiemetic" onchange="updateProgress('first-aid')"
+                                    type="checkbox" />
+                                <label for="first-aid-antiemetic">🤢 Antiemetic (for nausea)</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Clothing -->
+                <div class="card packing-category" id="clothes">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">👕</div>
+                        <div class="card-title">Clothing</div>
+                    </div>
+                    <div class="card-content collapsible-content">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="clothes-progress" style="width: 0%"></div>
+                        </div>
+                        <div id="clothes-count">0/9 items packed</div>
+                        <div class="add-item-container">
+                            <input id="clothes-input" placeholder="Add new item..." type="text" />
+                            <button onclick="addItem('clothes')">➕ Add</button>
+                        </div>
+                        <ul class="checklist">
+                            <li class="checklist-item">
+                                <input id="clothes-underwear" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-underwear">🩲 Underwear</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-socks" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-socks">🧦 Socks</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-tshirts" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-tshirts">👕 T-shirts</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-trousers" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-trousers">👖 Trousers</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-shoes" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-shoes">👟 Shoes</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-slippers" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-slippers">🥿 Slippers</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-swimwear" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-swimwear">🩱 Swimwear</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-hat" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-hat">🧢 Hat</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                            <li class="checklist-item">
+                                <input id="clothes-raincoat" onchange="updateProgress('clothes')" type="checkbox" />
+                                <label for="clothes-raincoat">🧥 Raincoat</label>
+                                <button class="remove-btn" onclick="removeItem(this)">×</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Misc -->
+                <div class="card packing-category" id="misc">
+                    <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                        <div class="card-icon">🧰</div>
+                        <div class="card-title">Misc</div>
+                    </div>
+                    <div class="card-content collapsible-content"></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="misc-progress" style="width: 0%"></div>
+                    </div>
+                    <div id="misc-count">0/4 items packed</div>
+                    <div class="add-item-container">
+                        <input id="misc-input" placeholder="Add new item..." type="text" />
+                        <button onclick="addItem('misc')">➕ Add</button>
+                    </div>
+                    <ul class="checklist">
+                        <li class="checklist-item">
+                            <input id="misc-scissors" onchange="updateProgress('misc')" type="checkbox" />
+                            <label for="misc-scissors">✂️ Scissors</label>
+                            <button class="remove-btn" onclick="removeItem(this)">×</button>
+                        </li>
+                        <li class="checklist-item">
+                            <input id="misc-tape" onchange="updateProgress('misc')" type="checkbox" />
+                            <label for="misc-tape">🛠️ Duct tape</label>
+                            <button class="remove-btn" onclick="removeItem(this)">×</button>
+                        </li>
+                        <li class="checklist-item">
+                            <input id="misc-bags" onchange="updateProgress('misc')" type="checkbox" />
+                            <label for="misc-bags">🛍️ Plastic bags</label>
+                            <button class="remove-btn" onclick="removeItem(this)">×</button>
+                        </li>
+                        <li class="checklist-item">
+                            <input id="misc-microfiber" onchange="updateProgress('misc')" type="checkbox" />
+                            <label for="misc-microfiber">🧻 Microfiber towels</label>
+                            <button class="remove-btn" onclick="removeItem(this)">×</button>
+                        </li>
+                    </ul>
+                </div>
             </div>
-<div class="emergency-item">
-<strong>Fire</strong><br/>
-                📞 111 / 112
+        </div>
+        <div class="dashboard-section section-3 main-tab-content" style="display:none">
+            <div class="card">
+                <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                    <div class="card-icon">ℹ️</div>
+                    <div class="card-title">Essential Info for Europeans</div>
+                </div>
+                <div class="card-content collapsible-content">
+                    <div class="currency-info">
+                        <h4>💰 Currency &amp; Money</h4>
+                        <p><strong>Sri Lankan Rupee (LKR)</strong> - 1 EUR ≈ 350 LKR (rates fluctuate)</p>
+                        <p>ATMs widely available, cards accepted in hotels/restaurants. Cash preferred for local
+                            transport,
+                            street food, and small shops.</p>
+                    </div>
+                    <div class="tips-grid">
+                        <div class="tip-item">
+                            <div class="tip-title">⏰ Time Zone</div>
+                            <div>UTC +5:30 (3.5-4.5 hours ahead of Europe)</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🗣️ Languages</div>
+                            <div>Sinhala, Tamil, English widely spoken</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🚗 Transport</div>
+                            <div>Tuk-tuks, buses, trains. Agree on prices beforehand</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🍛 Food Safety</div>
+                            <div>Bottled water, cooked food, avoid street ice</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🏛️ Culture</div>
+                            <div>Remove shoes at temples, dress modestly</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">💡 Tipping</div>
+                            <div>10% at restaurants, 100-200 LKR for guides</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-<div class="emergency-item">
-<strong>Tourist Police</strong><br/>
-                📞 +94 11 2421 052
+            <div class="card">
+                <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                    <div class="card-icon">🚨</div>
+                    <div class="card-title">Emergency Contacts</div>
+                </div>
+                <div class="card-content collapsible-content">
+                    <div class="emergency-contacts">
+                        <h3>Important Numbers</h3>
+                        <div class="emergency-grid">
+                            <div class="emergency-item">
+                                <strong>Police</strong><br />
+                                📞 119 / 112
+                            </div>
+                            <div class="emergency-item">
+                                <strong>Ambulance</strong><br />
+                                📞 110 / 112
+                            </div>
+                            <div class="emergency-item">
+                                <strong>Fire</strong><br />
+                                📞 111 / 112
+                            </div>
+                            <div class="emergency-item">
+                                <strong>Tourist Police</strong><br />
+                                📞 +94 11 2421 052
+                            </div>
+                            <div class="emergency-item">
+                                <strong>Tourist Hotline</strong><br />
+                                📞 1912
+                            </div>
+                            <div class="emergency-item">
+                                <strong>European Embassies</strong><br />
+                                Colombo diplomatic quarter
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-<div class="emergency-item">
-<strong>Tourist Hotline</strong><br/>
-                📞 1912
+            <div class="card">
+                <div class="card-header collapsible-header" onclick="toggleCollapse(this)">
+                    <div class="card-icon">🧭</div>
+                    <div class="card-title">Packing &amp; Safety Guide</div>
+                </div>
+                <div class="card-content collapsible-content">
+                    <div class="tips-grid">
+                        <div class="tip-item">
+                            <div class="tip-title">🦟 Mosquito Risks</div>
+                            <div>Use DEET-based repellent and cover up at dusk</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">📷 Safari Tips</div>
+                            <div>Wear neutral colors, bring binoculars, stay inside vehicle</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🏞️ Hiking (Ella)</div>
+                            <div>Use trekking poles, repellent wipes, socks for leeches</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🥶 Cold Zones</div>
+                            <div>Nuwara Eliya: bring gloves/scarf, umbrella, warm layers</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🐒 Temple Etiquette</div>
+                            <div>In Kandy, dress modestly, beware of monkeys and scams</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🧗 Sigiriya Climb</div>
+                            <div>Start early, wear hat and gloves, carry water</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🎧 Arugam Bay</div>
+                            <div>Bring ear plugs (party noise), dry bag, rash guard</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">🔒 Extras Worth Packing</div>
+                            <div>Whistle, sink plug, lock, antibacterial gel, snorkel mask</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-<div class="emergency-item">
-<strong>European Embassies</strong><br/>
-                Colombo diplomatic quarter
-            </div>
-</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header">
-<div class="card-icon">🧭</div>
-<div class="card-title">Packing &amp; Safety Guide</div>
-</div>
-<div class="tips-grid">
-<div class="tip-item">
-<div class="tip-title">🦟 Mosquito Risks</div>
-<div>Use DEET-based repellent and cover up at dusk</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">📷 Safari Tips</div>
-<div>Wear neutral colors, bring binoculars, stay inside vehicle</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🏞️ Hiking (Ella)</div>
-<div>Use trekking poles, repellent wipes, socks for leeches</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🥶 Cold Zones</div>
-<div>Nuwara Eliya: bring gloves/scarf, umbrella, warm layers</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🐒 Temple Etiquette</div>
-<div>In Kandy, dress modestly, beware of monkeys and scams</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🧗 Sigiriya Climb</div>
-<div>Start early, wear hat and gloves, carry water</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🎧 Arugam Bay</div>
-<div>Bring ear plugs (party noise), dry bag, rash guard</div>
-</div>
-<div class="tip-item">
-<div class="tip-title">🔒 Extras Worth Packing</div>
-<div>Whistle, sink plug, lock, antibacterial gel, snorkel mask</div>
-</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header">
-<div class="card-icon">🚌</div>
-<div class="card-title">Travel Time Overview</div>
-</div>
-<ul class="checklist">
-<li class="checklist-item"><label>Galle → Yala: 2.5h</label></li>
-<li class="checklist-item"><label>Yala → Arugam: 4.5h</label></li>
-<li class="checklist-item"><label>Arugam → Ella: 3.5h</label></li>
-<li class="checklist-item"><label>Ella → Nuwara Eliya: 3h train</label></li>
-<li class="checklist-item"><label>Nuwara Eliya → Kandy: 2.5h</label></li>
-<li class="checklist-item"><label>Kandy → Sigiriya: 2.5h</label></li>
-<li class="checklist-item"><label>Sigiriya → Colombo: 3.5h</label></li>
-</ul>
-</div>
-</div>
-</div>
-<script>
-function showTab(event, tabName) {
-    const contents = document.querySelectorAll('.tab-content');
-    contents.forEach(content => content.classList.remove('active'));
+        </div>
+        <!-- End: Info & Safety as 3 columns -->
+    </div>
+    </div>
+    <script>
+        function showTab(event, tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
 
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-    const selectedTab = document.getElementById(tabName);
-    if (selectedTab) {
-    selectedTab.classList.add('active');
-    }
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
 
-    event.target.classList.add('active');
-}
-
-function updateProgress(section) {
-    const checkboxes = document.querySelectorAll(`#${section} input[type="checkbox"]`);
-    const checked = document.querySelectorAll(`#${section} input[type="checkbox"]:checked`);
-    const progress = (checked.length / checkboxes.length) * 100;
-
-    const progressBar = document.getElementById(`${section}-progress`);
-    const progressCount = document.getElementById(`${section}-count`);
-
-    if (progressBar) {
-    progressBar.style.width = progress + '%';
-    }
-
-    if (progressCount) {
-    progressCount.textContent = `${checked.length}/${checkboxes.length} items packed`;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    // Load checkbox states from localStorage
-    const savedState = JSON.parse(localStorage.getItem('checkboxState') || '{}');
-
-    Object.keys(savedState).forEach(id => {
-    const checkbox = document.getElementById(id);
-    if (checkbox) {
-        checkbox.checked = savedState[id];
-    }
-    });
-
-    // Save checkbox states on change
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', function(e) {
-        savedState[e.target.id] = e.target.checked;
-        localStorage.setItem('checkboxState', JSON.stringify(savedState));
-
-        const section = cb.closest('.tab-content')?.id;
-        if (section) {
-        updateProgress(section);
+            event.target.classList.add('active');
         }
-    });
-    });
 
-    // Initial progress update
-    updateProgress('essentials');
+        function updateProgress(section) {
+            const checkboxes = document.querySelectorAll(`#${section} input[type="checkbox"]`);
+            const checked = document.querySelectorAll(`#${section} input[type="checkbox"]:checked`);
+            const progress = (checked.length / checkboxes.length) * 100;
 
-    // Setup tab switching
-    const tabButtons = document.querySelectorAll('.tab');
-    tabButtons.forEach(button => {
-    button.addEventListener('click', function(event) {
-        const tabName = button.getAttribute('data-tab');
-        showTab(event, tabName);
-    });
-    });
+            const progressBar = document.getElementById(`${section}-progress`);
+            const progressCount = document.getElementById(`${section}-count`);
 
-    // Animate cards
-    const cards = document.querySelectorAll('.card');
-    const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+
+            if (progressCount) {
+                progressCount.textContent = `${checked.length}/${checkboxes.length} items packed`;
+            }
         }
-    });
-    });
 
-    cards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(card);
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load checkbox states from localStorage
+            const savedState = JSON.parse(localStorage.getItem('checkboxState') || '{}');
 
-    // --- DARK MODE TOGGLE ---
-    const darkToggle = document.getElementById('darkToggle');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-    document.body.classList.add('dark-mode');
-    darkToggle.textContent = '☀️ Light Mode';
-    }
+            Object.keys(savedState).forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox) {
+                    checkbox.checked = savedState[id];
+                }
+            });
 
-    darkToggle.addEventListener('click', function () {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    darkToggle.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-});
-function addItem(sectionId) {
-    const input = document.querySelector(`#${sectionId}-input`);
-    const value = input.value.trim();
-    if (!value) return;
-    const ul = document.querySelector(`#${sectionId} .checklist`);
-    const id = `${sectionId}-custom-${Date.now()}`;
-    const li = document.createElement('li');
-    li.className = 'checklist-item';
-    li.innerHTML = `
+            // Save checkbox states on change
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', function (e) {
+                    savedState[e.target.id] = e.target.checked;
+                    localStorage.setItem('checkboxState', JSON.stringify(savedState));
+
+                    const section = cb.closest('.tab-content')?.id;
+                    if (section) {
+                        updateProgress(section);
+                    }
+                });
+            });
+
+            // Initial progress update
+            updateProgress('essentials');
+
+            // Setup tab switching
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    const tabName = button.getAttribute('data-tab');
+                    showTab(event, tabName);
+                });
+            });
+
+            // Animate cards
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // --- DARK MODE TOGGLE ---
+            const darkToggle = document.getElementById('darkToggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.body.classList.add('dark-mode');
+                darkToggle.textContent = '☀️';
+            }
+
+            darkToggle.addEventListener('click', function () {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                darkToggle.textContent = isDark ? '☀️' : '🌙';
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+        });
+        function addItem(sectionId) {
+            const input = document.querySelector(`#${sectionId}-input`);
+            const value = input.value.trim();
+            if (!value) return;
+            const ul = document.querySelector(`#${sectionId} .checklist`);
+            const id = `${sectionId}-custom-${Date.now()}`;
+            const li = document.createElement('li');
+            li.className = 'checklist-item';
+            li.innerHTML = `
         <input id="${id}" type="checkbox" onchange="updateProgress('${sectionId}')"/>
         <label for="${id}">${value}</label>
         <button class="remove-btn" onclick="removeItem(this)">×</button>`;
-    ul.appendChild(li);
-    input.value = '';
-    updateProgress(sectionId);
-}
+            ul.appendChild(li);
+            input.value = '';
+            updateProgress(sectionId);
+        }
 
-function removeItem(button) {
-    const li = button.closest('li');
-    if (li) li.remove();
-}</script></body></html>
+        function removeItem(button) {
+            const li = button.closest('li');
+            if (li) li.remove();
+        }
+        function toggleCollapse(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+
+
+        document.querySelectorAll('.main-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const selected = tab.getAttribute('data-tab');
+                document.querySelectorAll('.main-tab-content').forEach(content => {
+                    if (content.classList.contains(selected)) {
+                        content.classList.add('active');
+                        content.style.display = 'block';
+                    } else {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
